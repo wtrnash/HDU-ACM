@@ -29,6 +29,7 @@ Sample Output
 0.00
 0.75
 ******************************************************************************************************************************************************************/
+//这题最后是Time Limit Exceeded,没有AC，但是思想是差不多的
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -120,20 +121,18 @@ double findMinDistance(int start, int end)		//递归求出最小距离
 
 		for (int i = 0; i < temp.size(); i++)
 		{
-			//只处理左边的点即可
-			if (temp[i].isLeft)
+			for (int j = 1; j <= 7 && i + j < temp.size(); j++)		//每个点最多只要比较7次，具体原因可以去看最近点对问题 
 			{
-				for (int j = 1; j <= 7 && i + j < temp.size(); j++)		//每个点最多只要比较7次，具体原因可以去看最近点对问题 
+				//必须是两边的点作比较 
+				if (temp[i].isLeft != temp[i + j].isLeft)
 				{
-					//必须是和右边的点比
-					if (temp[i + j].isLeft == false)
-					{
-						double tempDistance = getDistance(temp[i], temp[i + j]);
-						if (tempDistance < minDistance)	//比当前最小值小则更新 
-							minDistance = tempDistance;
-					}
+					double tempDistance = getDistance(temp[i], temp[i + j]);
+					if (tempDistance < minDistance)	//比当前最小值小则更新 
+						minDistance = tempDistance;
 				}
+				
 			}
+	
 		}
 
 		return minDistance;
@@ -155,11 +154,11 @@ int main()
 			cin >> temp.x >> temp.y;
 			v.push_back(temp);
 		}
+		sort(v.begin(), v.end(), compareX);
 		cout << fixed << setprecision(2) << findMinDistance(0, n - 1) / 2 << endl;
 		cin >> n;
 	}
 
 	return 0;
 }
-
 
